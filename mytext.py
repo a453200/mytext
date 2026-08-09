@@ -4,18 +4,11 @@ import numpy as np
 from PIL import Image
 
 
-# ---------------------------------------------------------
-# 0. Page Configuration
-# ---------------------------------------------------------
 st.set_page_config(
     page_title="My Handwriting Library",
     page_icon="📚"
 )
 
-
-# ---------------------------------------------------------
-# 1. User Database
-# ---------------------------------------------------------
 if "users_db" not in st.session_state:
     st.session_state.users_db = {
         "user1": {
@@ -28,18 +21,10 @@ if "users_db" not in st.session_state:
         }
     }
 
-
-# ---------------------------------------------------------
-# 2. Login State
-# ---------------------------------------------------------
 if "logged_in" not in st.session_state:
     st.session_state.logged_in = False
     st.session_state.current_user = None
 
-
-# ---------------------------------------------------------
-# 3. Extract Characters from Image
-# ---------------------------------------------------------
 def extract_characters(image):
 
     img_array = np.array(image)
@@ -100,9 +85,6 @@ def extract_characters(image):
     return char_images, debug_img
 
 
-# ---------------------------------------------------------
-# 4. Generate Handwritten Text
-# ---------------------------------------------------------
 def generate_handwriting(text, char_dict):
 
     images_to_concat = []
@@ -179,10 +161,6 @@ def generate_handwriting(text, char_dict):
 
     return result_image
 
-
-# ---------------------------------------------------------
-# 5. Login Screen
-# ---------------------------------------------------------
 def show_login_screen():
 
     st.title("🔐 My Handwriting Library")
@@ -219,20 +197,10 @@ def show_login_screen():
 
             st.error("Username does not exist.")
 
-
-# ---------------------------------------------------------
-# 6. Main Application
-# ---------------------------------------------------------
 def show_main_app():
 
     user = st.session_state.current_user
-
-    # Get this user's personal library
     user_library = st.session_state.users_db[user]["library"]
-
-    # -----------------------------------------------------
-    # Header
-    # -----------------------------------------------------
 
     col1, col2 = st.columns([8, 2])
 
@@ -252,10 +220,6 @@ def show_main_app():
 
     st.write(f"Welcome, **{user}**!")
 
-
-    # -----------------------------------------------------
-    # Section 1: Register New Characters
-    # -----------------------------------------------------
 
     st.header("1. Register New Characters")
 
@@ -319,11 +283,6 @@ def show_main_app():
 
     st.divider()
 
-
-    # -----------------------------------------------------
-    # Section 2: Character Library
-    # -----------------------------------------------------
-
     st.header("2. My Character Library")
 
     collected_chars = sorted(
@@ -349,10 +308,6 @@ def show_main_app():
 
     st.divider()
 
-
-# -----------------------------------------------------
-# Section 3: Generate Handwritten Text
-# -----------------------------------------------------
 
 st.header("3. Write in My Handwriting")
 
@@ -406,10 +361,6 @@ if st.button("Generate Handwritten Text"):
                 caption="Your Handwriting",
                 use_container_width=True
             )
-
-# ---------------------------------------------------------
-# 7. Screen Routing
-# ---------------------------------------------------------
 if not st.session_state.logged_in:
 
     show_login_screen()
@@ -417,4 +368,3 @@ if not st.session_state.logged_in:
 else:
 
     show_main_app()
-```
