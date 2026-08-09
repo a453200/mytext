@@ -4,6 +4,9 @@ import numpy as np
 from PIL import Image
 
 
+# -----------------------------------------------------
+# Page Configuration
+# -----------------------------------------------------
 
 st.set_page_config(
     page_title="My Handwriting Library",
@@ -11,6 +14,9 @@ st.set_page_config(
 )
 
 
+# -----------------------------------------------------
+# User Database
+# -----------------------------------------------------
 
 if "users_db" not in st.session_state:
     st.session_state.users_db = {
@@ -25,12 +31,18 @@ if "users_db" not in st.session_state:
     }
 
 
+# -----------------------------------------------------
+# Login State
+# -----------------------------------------------------
+
 if "logged_in" not in st.session_state:
     st.session_state.logged_in = False
     st.session_state.current_user = None
 
 
-
+# -----------------------------------------------------
+# Extract Characters
+# -----------------------------------------------------
 
 def extract_characters(image):
 
@@ -104,6 +116,10 @@ def extract_characters(image):
 
     return char_images, debug_img
 
+
+# -----------------------------------------------------
+# Generate Handwritten Text
+# -----------------------------------------------------
 
 def generate_handwriting(text, char_dict):
 
@@ -195,53 +211,91 @@ def generate_handwriting(text, char_dict):
     return result_image
 
 
-
+# -----------------------------------------------------
+# Login Screen
+# -----------------------------------------------------
+# ---------------------------------------------------------
+# 5. Login / Sign Up Screen
+# ---------------------------------------------------------
 def show_login_screen():
 
     st.title("🔐 My Handwriting Library")
 
-    st.write(
-        "Please log in to access your personal handwriting library."
-    )
+    st.write("Welcome! Please log in or create a new account.")
 
-    username = st.text_input(
-        "Username",
-        placeholder="e.g., user1"
-    )
+    # 로그인 탭과 회원가입 탭 만들기
+    tab_login, tab_signup = st.tabs(["Log In", "Sign Up"])
 
-    password = st.text_input(
-        "Password",
-        type="password",
-        placeholder="e.g., 111"
-    )
+    # --- 로그인 탭 ---
+    with tab_login:
+        st.subheader("Log In to Your Account")
 
-    if st.button("Log In"):
+        login_username = st.text_input(
+            "Username",
+            placeholder="e.g., user1",
+            key="login_user"
+        )
 
-        if username in st.session_state.users_db:
+        login_password = st.text_input(
+            "Password",
+            type="password",
+            placeholder="e.g., 111",
+            key="login_pass"
+        )
 
-            if (
-                st.session_state.users_db[username]["password"]
-                == password
-            ):
-
-                st.session_state.logged_in = True
-                st.session_state.current_user = username
-
-                st.rerun()
-
+        if st.button("Log In"):
+            if login_username in st.session_state.users_db:
+                if st.session_state.users_db[login_username]["password"] == login_password:
+                    st.session_state.logged_in = True
+                    st.session_state.current_user = login_username
+                    st.rerun()
+                else:
+                    st.error("Incorrect password.")
             else:
+                st.error("Username does not exist.")
 
-                st.error(
-                    "Incorrect password."
-                )
+    # --- 회원가입 탭 ---
+    with tab_signup:
+        st.subheader("Create a New Account")
 
-        else:
+        new_username = st.text_input(
+            "Choose a Username",
+            placeholder="Enter a new username",
+            key="signup_user"
+        )
 
-            st.error(
-                "Username does not exist."
-            )
+        new_password = st.text_input(
+            "Choose a Password",
+            type="password",
+            placeholder="Enter a new password",
+            key="signup_pass"
+        )
 
+        confirm_password = st.text_input(
+            "Confirm Password",
+            type="password",
+            placeholder="Type your password again",
+            key="signup_confirm"
+        )
 
+        if st.button("Sign Up"):
+            if not new_username or not new_password:
+                st.warning("Please fill out all fields.")
+            elif new_username in st.session_state.users_db:
+                st.error("This username already exists. Please choose a different one.")
+            elif new_password != confirm_password:
+                st.error("Passwords do not match. Please check again.")
+            else:
+                # 데이터베이스(딕셔너리)에 새 사용자 추가
+                st.session_state.users_db[new_username] = {
+                    "password": new_password,
+                    "library": {}
+                }
+                st.success(f"Account '{new_username}' created successfully! You can now log in.")
+
+# -----------------------------------------------------
+# Main Application
+# -----------------------------------------------------
 
 def show_main_app():
 
@@ -252,6 +306,9 @@ def show_main_app():
         st.session_state.users_db[user]["library"]
     )
 
+    # -------------------------------------------------
+    # Header
+    # -------------------------------------------------
 
     col1, col2 = st.columns([8, 2])
 
@@ -277,6 +334,9 @@ def show_main_app():
     )
 
 
+    # -------------------------------------------------
+    # Section 1: Register New Characters
+    # -------------------------------------------------
 
     st.header(
         "1. Register New Characters"
@@ -354,6 +414,9 @@ def show_main_app():
     st.divider()
 
 
+    # -------------------------------------------------
+    # Section 2: My Character Library
+    # -------------------------------------------------
 
     st.header(
         "2. My Character Library"
@@ -385,6 +448,9 @@ def show_main_app():
     st.divider()
 
 
+    # -------------------------------------------------
+    # Section 3: Write in My Handwriting
+    # -------------------------------------------------
 
     st.header(
         "3. Write in My Handwriting"
@@ -452,6 +518,9 @@ def show_main_app():
                 )
 
 
+# -----------------------------------------------------
+# Screen Routing
+# -----------------------------------------------------
 
 if not st.session_state.logged_in:
 
@@ -460,3 +529,4 @@ if not st.session_state.logged_in:
 else:
 
     show_main_app()
+
