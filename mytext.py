@@ -353,7 +353,7 @@ def show_main_app():
     # -----------------------------------------------------
     # Section 3: Generate Handwritten Text
     # -----------------------------------------------------
-    if st.button("Generate Handwritten Text"):
+        if st.button("Generate Handwritten Text"):
             if not user_text:
                 st.warning(
                     "Please enter a sentence first."
