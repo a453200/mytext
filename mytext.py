@@ -353,13 +353,12 @@ def show_main_app():
     # -----------------------------------------------------
     # Section 3: Generate Handwritten Text
     # -----------------------------------------------------
-        if st.button("Generate Handwritten Text"):
-            if not user_text:
-                st.warning(
+    if st.button("Generate Handwritten Text"):
+        if not user_text:
+            st.warning(
                     "Please enter a sentence first."
                 )
-            else:
-                # [수정된 부분] .lower()를 제거하여 대소문자를 있는 그대로 구분합니다.
+        else:
                 missing_chars = [
                     c
                     for c in user_text
@@ -370,7 +369,7 @@ def show_main_app():
                     list(set(missing_chars))
                 )
     
-                if missing_unique:
+               if missing_unique:
                     st.warning(
                         "The following characters are not in your library: "
                         + ", ".join(missing_unique)
