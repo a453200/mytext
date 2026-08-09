@@ -1,13 +1,9 @@
-```python
 import streamlit as st
 import cv2
 import numpy as np
 from PIL import Image
 
 
-# -----------------------------------------------------
-# Page Configuration
-# -----------------------------------------------------
 
 st.set_page_config(
     page_title="My Handwriting Library",
@@ -15,9 +11,6 @@ st.set_page_config(
 )
 
 
-# -----------------------------------------------------
-# User Database
-# -----------------------------------------------------
 
 if "users_db" not in st.session_state:
     st.session_state.users_db = {
@@ -32,18 +25,12 @@ if "users_db" not in st.session_state:
     }
 
 
-# -----------------------------------------------------
-# Login State
-# -----------------------------------------------------
-
 if "logged_in" not in st.session_state:
     st.session_state.logged_in = False
     st.session_state.current_user = None
 
 
-# -----------------------------------------------------
-# Extract Characters
-# -----------------------------------------------------
+
 
 def extract_characters(image):
 
@@ -117,10 +104,6 @@ def extract_characters(image):
 
     return char_images, debug_img
 
-
-# -----------------------------------------------------
-# Generate Handwritten Text
-# -----------------------------------------------------
 
 def generate_handwriting(text, char_dict):
 
@@ -212,9 +195,6 @@ def generate_handwriting(text, char_dict):
     return result_image
 
 
-# -----------------------------------------------------
-# Login Screen
-# -----------------------------------------------------
 
 def show_login_screen():
 
@@ -262,9 +242,6 @@ def show_login_screen():
             )
 
 
-# -----------------------------------------------------
-# Main Application
-# -----------------------------------------------------
 
 def show_main_app():
 
@@ -275,9 +252,6 @@ def show_main_app():
         st.session_state.users_db[user]["library"]
     )
 
-    # -------------------------------------------------
-    # Header
-    # -------------------------------------------------
 
     col1, col2 = st.columns([8, 2])
 
@@ -303,9 +277,6 @@ def show_main_app():
     )
 
 
-    # -------------------------------------------------
-    # Section 1: Register New Characters
-    # -------------------------------------------------
 
     st.header(
         "1. Register New Characters"
@@ -383,9 +354,6 @@ def show_main_app():
     st.divider()
 
 
-    # -------------------------------------------------
-    # Section 2: My Character Library
-    # -------------------------------------------------
 
     st.header(
         "2. My Character Library"
@@ -417,9 +385,6 @@ def show_main_app():
     st.divider()
 
 
-    # -------------------------------------------------
-    # Section 3: Write in My Handwriting
-    # -------------------------------------------------
 
     st.header(
         "3. Write in My Handwriting"
@@ -487,9 +452,6 @@ def show_main_app():
                 )
 
 
-# -----------------------------------------------------
-# Screen Routing
-# -----------------------------------------------------
 
 if not st.session_state.logged_in:
 
@@ -498,4 +460,3 @@ if not st.session_state.logged_in:
 else:
 
     show_main_app()
-```
