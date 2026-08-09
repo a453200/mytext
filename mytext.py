@@ -350,95 +350,62 @@ def show_main_app():
     st.divider()
 
 
-    # -----------------------------------------------------
-    # Section 3: Generate Handwritten Text
-    # -----------------------------------------------------
-    if st.button("Generate Handwritten Text"):
-        if not user_text:
-            st.warning(
-                    "Please enter a sentence first."
-                )
-        else:
-                missing_chars = [
-                    c
-                    for c in user_text
-                    if c != " " and c not in user_library
-                ]
-    
-                missing_unique = sorted(
-                    list(set(missing_chars))
-                )
-    
-               if missing_unique:
-                    st.warning(
-                        "The following characters are not in your library: "
-                        + ", ".join(missing_unique)
-                    )
-                else:
-                    # [수정된 부분] normalized_text를 쓰지 않고 user_text를 그대로 넘겨줍니다.
-                    with st.spinner("Generating your handwriting..."):
-                        result_image = generate_handwriting(
-                            user_text,
-                            user_library
-                        )
-    
-                    st.success(
-                        "Handwritten text generated successfully!"
-                    )
-                    st.image(
-                        result_image,
-                        caption="Your Handwriting",
-                        use_container_width=True
-                    )
-                    
-        st.header("3. Write in My Handwriting")
-    
-        user_text = st.text_input(
-            "Enter an English sentence.",
-            placeholder="Example: Hello World!"
-        )
-    
-        if st.button("Generate Handwritten Text"):
-    
-            if st.button("Generate Handwritten Text"):
-            if not user_text:
-                st.warning(
-                    "Please enter a sentence first."
-                )
-            else:
-                # [수정된 부분] .lower()를 제거하여 대소문자를 있는 그대로 구분합니다.
-                missing_chars = [
-                    c
-                    for c in user_text
-                    if c != " " and c not in user_library
-                ]
-    
-                missing_unique = sorted(
-                    list(set(missing_chars))
-                )
-    
-                if missing_unique:
-                    st.warning(
-                        "The following characters are not in your library: "
-                        + ", ".join(missing_unique)
-                    )
-                else:
-                    # [수정된 부분] normalized_text를 쓰지 않고 user_text를 그대로 넘겨줍니다.
-                    with st.spinner("Generating your handwriting..."):
-                        result_image = generate_handwriting(
-                            user_text,
-                            user_library
-                        )
-    
-                    st.success(
-                        "Handwritten text generated successfully!"
-                    )
-                    st.image(
-                        result_image,
-                        caption="Your Handwriting",
-                        use_container_width=True
-                    )
+# -----------------------------------------------------
+# Section 3: Generate Handwritten Text
+# -----------------------------------------------------
 
+st.header("3. Write in My Handwriting")
+
+user_text = st.text_input(
+    "Enter an English sentence.",
+    placeholder="Example: Hello World!"
+)
+
+if st.button("Generate Handwritten Text"):
+
+    if not user_text:
+        st.warning(
+            "Please enter a sentence first."
+        )
+
+    else:
+        # Check which characters are missing from the library
+        missing_chars = [
+            c
+            for c in user_text
+            if c != " " and c not in user_library
+        ]
+
+        missing_unique = sorted(
+            list(set(missing_chars))
+        )
+
+        if missing_unique:
+
+            st.warning(
+                "The following characters are not in your library: "
+                + ", ".join(missing_unique)
+            )
+
+        else:
+
+            # Generate handwritten text
+            with st.spinner("Generating your handwriting..."):
+
+                result_image = generate_handwriting(
+                    user_text,
+                    user_library
+                )
+
+            st.success(
+                "Handwritten text generated successfully!"
+            )
+
+            st.image(
+                result_image,
+                caption="Your Handwriting",
+                use_container_width=True
+            )
 
 # ---------------------------------------------------------
 # 7. Screen Routing
